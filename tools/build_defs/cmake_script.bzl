@@ -65,7 +65,7 @@ def create_cmake_script(
     if not params.cache.get("CMAKE_RANLIB"):
         params.cache.update({"CMAKE_RANLIB": ""})
 
-    set_env_vars = " ".join([key + "=\"" + params.env[key] + "\"" for key in params.env])
+    set_env_vars = " ".join([key + "=\"" + params.env[key].replace("\"", "\\\\\"") + "\"" for key in params.env])
     str_cmake_cache_entries = " ".join(["-D" + key + "=\"" + params.cache[key] + "\"" for key in params.cache])
     cmake_call = " ".join([
         set_env_vars,
@@ -74,6 +74,7 @@ def create_cmake_script(
         " ".join(options),
         "$EXT_BUILD_ROOT/" + root,
     ])
+
 
     return "\n".join(params.commands + [cmake_call])
 
